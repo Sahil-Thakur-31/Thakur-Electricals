@@ -114,17 +114,19 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                    siteConfig.address.full
-                  )}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-start gap-2.5 text-sm text-secondary-foreground/80 transition-colors hover:text-brand"
-                >
-                  <MapPin className="mt-0.5 size-4 shrink-0" />
-                  {siteConfig.address.full}
-                </a>
+                <address className="not-italic">
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      siteConfig.address.full
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-start gap-2.5 text-sm text-secondary-foreground/80 transition-colors hover:text-brand"
+                  >
+                    <MapPin className="mt-0.5 size-4 shrink-0" />
+                    {siteConfig.address.full}
+                  </a>
+                </address>
               </li>
             </ul>
           </div>

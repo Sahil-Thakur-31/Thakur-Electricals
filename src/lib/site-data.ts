@@ -36,6 +36,7 @@ export const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Products", href: "#products" },
   { label: "Why Us", href: "#why-us" },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
@@ -122,5 +123,48 @@ export const trustPoints = [
     title: "Honest Prices, Best Quality",
     description: "Wholesale rates on all electrical items, no surprises.",
     icon: "hand-coins",
+  },
+];
+
+export const faqs = [
+  {
+    question: "Which areas do you serve?",
+    answer:
+      "We're based in Vadgaon Budruk and cover homes, shops, and offices across that part of Pune. Not sure if you're in range? Just call or WhatsApp us the location and we'll confirm.",
+  },
+  {
+    question: "What electrical services do you offer?",
+    answer:
+      "Full electrical wiring and rewiring, switch/socket/MCB/DB fitting and installation, LED lights and fixtures, general safety checks, and all-round home electrical solutions — not just repairs.",
+  },
+  {
+    question: "Do you repair home appliances too?",
+    answer:
+      "Yes — ceiling and stand fans, exhaust fans, geysers, water boilers, mixer grinders, irons, and most other electrical home appliances. If it's not listed on the site, ask us anyway.",
+  },
+  {
+    question: "Are you available 24 hours a day?",
+    answer:
+      "Yes, day or night. For urgent issues like a tripped board or no power at home, call us directly rather than filling the form — it's faster.",
+  },
+  {
+    question: "Do your prices really stay wholesale?",
+    answer:
+      "Yes. We sell electrical items at wholesale rates with no hidden markup, and quote the job cost upfront before starting work.",
+  },
+  {
+    question: "Is the technician actually qualified?",
+    answer:
+      "Thakur Electricals is run by Sagar Thakur, an ITI graduate with hands-on electrical training — not an unlicensed handyman.",
+  },
+  {
+    question: "How fast can you reach me after I call?",
+    answer:
+      "Most repairs within Vadgaon Budruk are handled the same day. For planned work like full-home wiring, we'll give you a clear time estimate before starting.",
+  },
+  {
+    question: "Do you give a free quote before starting work?",
+    answer:
+      "Yes. Share the job details by call, WhatsApp, or the contact form, and we'll give you a free estimate before any work begins.",
   },
 ];

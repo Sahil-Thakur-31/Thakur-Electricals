@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { siteConfig } from "@/lib/site-data";
+import { siteConfig, services } from "@/lib/site-data";
 import { heading } from "@/lib/fonts/heading";
 import { body } from "@/lib/fonts/body";
 import { geistMono } from "@/lib/fonts/mono";
@@ -74,6 +74,15 @@ const jsonLd = {
   telephone: `+91${siteConfig.phone}`,
   email: siteConfig.email,
   priceRange: "₹₹",
+  inLanguage: "en-IN",
+  // Real credential, not boilerplate — ties the business to a named,
+  // qualified person, which search engines weigh for trust/expertise
+  // signals on local-service queries (part of what Google calls E-E-A-T).
+  founder: {
+    "@type": "Person",
+    name: siteConfig.owner,
+    jobTitle: siteConfig.ownerTitle,
+  },
   address: {
     "@type": "PostalAddress",
     streetAddress: siteConfig.address.full,
@@ -104,6 +113,18 @@ const jsonLd = {
     ],
     opens: "00:00",
     closes: "23:59",
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Electrical Services",
+    itemListElement: services.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: service.title,
+        description: service.description,
+      },
+    })),
   },
   ...(sameAs.length > 0 ? { sameAs } : {}),
 };
