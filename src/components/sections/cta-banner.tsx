@@ -20,8 +20,8 @@ export function CtaBanner() {
           <p className="font-heading text-2xl font-bold sm:text-3xl">
             {siteConfig.taglineMarathi}
           </p>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-brand-foreground/85 sm:max-w-3xl sm:text-base">
-            Your service, our responsibility — call now for wholesale-priced
+          <p className="mx-auto mt-3 max-w-2xl text-sm font-semibold text-brand-foreground/85 sm:max-w-3xl sm:text-base">
+            Your service, our responsibility - call now for wholesale-priced
             electrical work you can trust.
           </p>
           <Button

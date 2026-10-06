@@ -97,7 +97,7 @@ export const products: Product[] = [
 ];
 
 export const stats = [
-  { label: "Years of Trust", value: 1, suffix: "+" },
+  { label: "Years of Trust", value: 2, suffix: "+" },
   { label: "Appliances Repaired", value: 500, suffix: "+" },
   { label: "Happy Customers", value: 1000, suffix: "+" },
   { label: "Service", value: 24, suffix: "/7" },
