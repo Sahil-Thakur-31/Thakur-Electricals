@@ -4,7 +4,6 @@ import * as React from "react";
 import { useTheme } from "next-themes";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Sparkles, Float, Sphere, Cylinder, Torus } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { StaticBulb } from "./static-bulb";
 
@@ -251,31 +250,54 @@ function hasWebGL() {
  * actually draws, it visually covers the static bulb beneath it; when it
  * doesn't, the static bulb was there all along. The hero is never blank.
  */
+const MAX_ATTEMPTS = 3;
+
 export function HeroScene({ reducedMotion }: { reducedMotion: boolean }) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme !== "light";
   const [canvasFailed, setCanvasFailed] = React.useState(() => !hasWebGL());
   const [confirmed, setConfirmed] = React.useState(false);
-  // Give the live canvas a brief head start before falling back to the
-  // static bulb — if 3D confirms within this window (the common case), the
-  // static illustration never appears at all, so there's nothing to swap
-  // and nothing to flicker. It only shows up for a genuinely slow/failed GPU.
+  // "Reload fixes it" is the signature of a one-time GPU/context negotiation
+  // race on cold start (common on hybrid-GPU laptops), not a hard
+  // incompatibility — so instead of giving up permanently on the first
+  // failed attempt, remount the canvas a couple of times first. This
+  // automates exactly what a manual page reload was doing.
+  const [attempt, setAttempt] = React.useState(0);
+  // Give the live canvas a head start before falling back to the static
+  // bulb — if 3D confirms within this window (the common case), the static
+  // illustration never appears at all, so there's nothing to swap and
+  // nothing to flicker. Generous, since a cold GPU process can genuinely
+  // take a second or two to produce its first frame.
   const [graceExpired, setGraceExpired] = React.useState(false);
+
+  // Shared by the startup watchdog and a mid-session context loss: bump the
+  // attempt counter (remounting the canvas fresh) unless we've already used
+  // up our retries, in which case give up for good. A context can die well
+  // after it initially worked (driver reset, GPU memory pressure, tab
+  // backgrounding) — that's a different failure from a slow cold start, but
+  // it deserves the same "try again before giving up" treatment, not an
+  // immediate permanent fallback.
+  const retry = React.useCallback(() => {
+    setConfirmed(false);
+    setAttempt((a) => {
+      if (a + 1 >= MAX_ATTEMPTS) {
+        setCanvasFailed(true);
+        return a;
+      }
+      setGraceExpired(false);
+      return a + 1;
+    });
+  }, []);
 
   React.useEffect(() => {
     if (canvasFailed || confirmed) return;
-    const timer = window.setTimeout(() => setGraceExpired(true), 500);
-    return () => window.clearTimeout(timer);
-  }, [canvasFailed, confirmed]);
-
-  React.useEffect(() => {
-    if (canvasFailed) return;
-    const errorHandler = (event: ErrorEvent) => {
-      if (/webgl|three|gl\./i.test(String(event.message))) setCanvasFailed(true);
+    const graceTimer = window.setTimeout(() => setGraceExpired(true), 900);
+    const retryTimer = window.setTimeout(retry, 3200);
+    return () => {
+      window.clearTimeout(graceTimer);
+      window.clearTimeout(retryTimer);
     };
-    window.addEventListener("error", errorHandler);
-    return () => window.removeEventListener("error", errorHandler);
-  }, [canvasFailed]);
+  }, [canvasFailed, confirmed, attempt, retry]);
 
   const showStatic = canvasFailed || (!confirmed && graceExpired);
 
@@ -290,16 +312,24 @@ export function HeroScene({ reducedMotion }: { reducedMotion: boolean }) {
       />
 
       {!canvasFailed && (
-        <WebGLBoundary fallback={null}>
+        <WebGLBoundary key={attempt} fallback={null}>
           <Canvas
             dpr={[1, 1.75]}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+            // "default" (not "high-performance") avoids forcing a discrete-
+            // GPU handoff on hybrid-graphics laptops — that negotiation can
+            // race or stall on a cold start, which is exactly the kind of
+            // thing a reload "fixes" by giving it a second, cleaner attempt.
+            gl={{ antialias: true, alpha: true, powerPreference: "default" }}
             camera={{ fov: 26, position: [0, 0.1, 11] }}
             onCreated={({ gl }) => {
+              // preventDefault() tells the browser we intend to recover —
+              // without it the context is lost for good. retry() remounts
+              // the canvas fresh, which is how that recovery actually
+              // happens (R3F doesn't re-upload GPU resources into a
+              // restored context on its own).
               gl.domElement.addEventListener("webglcontextlost", (e) => {
                 e.preventDefault();
-                setCanvasFailed(true);
-                setConfirmed(false);
+                retry();
               });
             }}
           >
@@ -310,14 +340,6 @@ export function HeroScene({ reducedMotion }: { reducedMotion: boolean }) {
                 isDark={isDark}
                 onConfirmed={() => setConfirmed(true)}
               />
-              <EffectComposer multisampling={0}>
-                <Bloom
-                  intensity={0.7}
-                  luminanceThreshold={0.4}
-                  luminanceSmoothing={0.85}
-                  mipmapBlur
-                />
-              </EffectComposer>
             </React.Suspense>
           </Canvas>
         </WebGLBoundary>

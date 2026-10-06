@@ -31,6 +31,7 @@ export function Services() {
     <section id="services" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
+          align="left"
           eyebrow="What We Do"
           title="Complete electrical services, one call away"
           description="From a single switch repair to full-home rewiring — sales, service and repairing, handled with care."

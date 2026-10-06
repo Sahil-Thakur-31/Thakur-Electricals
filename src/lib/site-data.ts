@@ -1,4 +1,7 @@
 export const siteConfig = {
+  // Update once the real domain is live (Vercel project settings or here) —
+  // metadata, the sitemap, and the structured data below all read from it.
+  siteUrl: "https://thakurelectricals.vercel.app",
   name: "Thakur Electricals",
   tagline: "Powering Homes, Lighting Lives",
   taglineMarathi: "तुमची सेवा, आमची जबाबदारी!",
@@ -10,11 +13,16 @@ export const siteConfig = {
   phoneDisplay: "+91 74480 44549",
   email: "thakurelectricals2@gmail.com",
   address: {
-    line1: "Ganesh Kripa, Charwad Wasti",
-    line2: "Nivrutti Nagar, Vadgaon Budruk",
-    line3: "Pune - 411041",
-    full: "Ganesh Kripa, Charwad Wasti, Nivrutti Nagar, Vadgaon Budruk, Pune - 411041",
+    full: "Thakur Electricals, Shop No. 1, Ganesh Kripa, Charwad Wasti, near Azad Mitra Mandal, Nivrutti Nagar, Vadgaon Budruk, Pune, Maharashtra 411041",
+    locality: "Vadgaon Budruk",
+    region: "Maharashtra",
+    postalCode: "411041",
+    country: "IN",
   },
+  // Locality-level coordinates for Vadgaon Budruk, Pune — close enough for
+  // local-search relevance. Swap in the exact shop pin from Google Maps
+  // (right-click the pin → the lat/lng shown) if you want it pinpoint-exact.
+  geo: { lat: 18.4634, lng: 73.8318 },
   hours: "Available 24 hours — Day or Night",
   social: {
     whatsapp: "https://wa.me/917448044549",

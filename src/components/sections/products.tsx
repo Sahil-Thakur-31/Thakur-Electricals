@@ -203,6 +203,7 @@ export function Products() {
     <section id="products" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
+          align="left"
           eyebrow="All Type Repairing"
           title="We repair every appliance in your home"
           description="Spot your appliance's trouble below — we fix it at your doorstep, usually the same day."

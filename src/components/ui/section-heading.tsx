@@ -26,14 +26,19 @@ export function SectionHeading({
           {eyebrow}
         </span>
       )}
-      <h2 className="max-w-2xl text-balance font-heading text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+      <h2
+        className={cn(
+          "text-balance font-heading text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl",
+          align === "center" ? "max-w-4xl" : ""
+        )}
+      >
         {title}
       </h2>
       {description && (
         <p
           className={cn(
-            "mt-4 max-w-xl text-balance text-muted-foreground sm:text-lg",
-            align === "center" ? "mx-auto" : ""
+            "mt-4 text-balance text-muted-foreground sm:text-lg",
+            align === "center" ? "mx-auto max-w-2xl" : "sm:whitespace-nowrap"
           )}
         >
           {description}

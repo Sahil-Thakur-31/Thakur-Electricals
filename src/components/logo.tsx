@@ -41,7 +41,7 @@ export function Logo({ className }: { className?: string }) {
         <span className="font-heading text-[1.05rem] font-bold tracking-tight">
           Thakur <span className="text-gradient-brand">Electricals</span>
         </span>
-        <span className="text-[0.65rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+        <span className="mt-1.5 text-[0.65rem] font-medium whitespace-nowrap uppercase tracking-[0.18em] text-muted-foreground">
           Sales · Services · Repairing
         </span>
       </span>

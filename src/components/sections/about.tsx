@@ -72,7 +72,6 @@ export function About() {
               eyebrow="Why Choose Us"
               title="Your service, our responsibility"
               description={siteConfig.taglineMarathi + " — that's our promise on every job, big or small."}
-              className="items-start text-left"
             />
 
             <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">

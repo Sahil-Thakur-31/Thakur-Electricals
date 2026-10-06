@@ -33,14 +33,14 @@ export function StaticBulb({ className }: { className?: string }) {
 
   return (
     <div
-      className={`absolute inset-0 flex items-end justify-center pb-0 lg:items-end lg:justify-end lg:pr-[14%] lg:pb-[20%] ${className ?? ""}`}
+      className={`absolute inset-0 flex items-end justify-center pb-0 lg:items-end lg:justify-end lg:pr-[12%] lg:pb-[10%] ${className ?? ""}`}
       aria-hidden="true"
     >
       <motion.svg
         viewBox="0 0 220 320"
         animate={{ y: [0, -14, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="h-[26%] max-h-[260px] w-auto drop-shadow-[0_0_80px_rgba(255,138,42,0.45)] lg:h-[42%] lg:max-h-[420px]"
+        className="h-[34%] max-h-[340px] w-auto drop-shadow-[0_0_80px_rgba(255,138,42,0.45)] lg:h-[56%] lg:max-h-[540px]"
       >
         <defs>
           <radialGradient id="glass" cx="35%" cy="25%" r="80%">

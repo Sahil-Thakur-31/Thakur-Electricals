@@ -1,42 +1,51 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/lib/site-data";
+import { heading } from "@/lib/fonts/heading";
+import { body } from "@/lib/fonts/body";
+import { geistMono } from "@/lib/fonts/mono";
 
-const heading = Space_Grotesk({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-const body = Plus_Jakarta_Sans({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const titleFull = `${siteConfig.name} — ${siteConfig.tagline}`;
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — ${siteConfig.tagline}`,
+  metadataBase: new URL(siteConfig.siteUrl),
+  title: {
+    default: titleFull,
+    template: `%s · ${siteConfig.name}`,
+  },
   description: siteConfig.description,
   keywords: [
     "electrician Pune",
-    "electrical repair Vadgaon Budruk",
-    "Thakur Electricals",
-    "wiring services Pune",
+    "electrician near me",
+    "electrician Vadgaon Budruk",
+    "electrical repair Pune",
+    "electrical wiring Pune",
     "appliance repair Pune",
+    "geyser repair Pune",
+    "fan repair Pune",
+    "Thakur Electricals",
   ],
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   openGraph: {
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    title: titleFull,
     description: siteConfig.description,
     type: "website",
+    url: siteConfig.siteUrl,
+    siteName: siteConfig.name,
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: titleFull,
+    description: siteConfig.description,
   },
 };
 
@@ -47,6 +56,58 @@ export const viewport: Viewport = {
   ],
 };
 
+// LocalBusiness structured data — this is what lets Google understand
+// "who, where, how to reach" well enough to surface the site (and a rich
+// result) for local searches like "electrician near me" / "electrician
+// Vadgaon Budruk". sameAs only lists profiles that are actually live.
+const sameAs = [siteConfig.social.instagram, siteConfig.social.facebook].filter(
+  (url) => url && url !== "#"
+);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Electrician",
+  name: siteConfig.name,
+  description: siteConfig.description,
+  image: `${siteConfig.siteUrl}/opengraph-image`,
+  url: siteConfig.siteUrl,
+  telephone: `+91${siteConfig.phone}`,
+  email: siteConfig.email,
+  priceRange: "₹₹",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.address.full,
+    addressLocality: siteConfig.address.locality,
+    addressRegion: siteConfig.address.region,
+    postalCode: siteConfig.address.postalCode,
+    addressCountry: siteConfig.address.country,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: siteConfig.geo.lat,
+    longitude: siteConfig.geo.lng,
+  },
+  areaServed: {
+    "@type": "City",
+    name: "Pune",
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    opens: "00:00",
+    closes: "23:59",
+  },
+  ...(sameAs.length > 0 ? { sameAs } : {}),
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -55,6 +116,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${heading.variable} ${body.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
